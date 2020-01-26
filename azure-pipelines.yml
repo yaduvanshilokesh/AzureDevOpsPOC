@@ -61,4 +61,4 @@ jobs:
         - task: IISWebAppDeploymentOnMachineGroup@0
           inputs:
             webSiteName: 'testdeploy'
-            package: 'C:\azagent\A3\_work\2\buildArtifact\WebApp.zip' 
+            package: '$(System.DefaultWorkingDirectory)\**.zip' 
