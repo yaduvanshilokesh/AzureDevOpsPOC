@@ -1,8 +1,3 @@
-# ASP.NET
-# Build and test ASP.NET projects.
-# Add steps that publish symbols, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
-
 trigger:
 - master
 
@@ -14,21 +9,56 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
-steps:
-- task: NuGetToolInstaller@1
+jobs:
+- job: Build
+  displayName: Build
+  steps:
+  - task: NuGetToolInstaller@1
 
-- task: NuGetCommand@2
-  inputs:
-    restoreSolution: '$(solution)'
+  - task: NuGetCommand@2
+    inputs:
+      restoreSolution: '$(solution)'
 
-- task: VSBuild@1
-  inputs:
-    solution: '$(solution)'
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+  - task: VSBuild@1
+    inputs:
+      solution: '$(solution)'
+      msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
+      platform: '$(buildPlatform)'
+      configuration: '$(buildConfiguration)'
 
-- task: VSTest@2
-  inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+      artifactName: buildArtifact
+
+- deployment: VMDeploy
+  displayName: IIS_Deploy
+  pool:
+    vmImage: 'windows-latest'
+  environment: Test.ICPL13104
+  dependsOn: Build
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+        - task: IISWebAppManagementOnMachineGroup@0
+          inputs:
+            iISDeploymentType: 'IISWebsite'
+            actionIISWebsite: 'CreateOrUpdateWebsite'
+            websiteName: 'testdeploy'
+            websitePhysicalPath: 'D:\testdeploy' 
+            websitePhysicalPathAuth: 'WebsiteUserPassThrough'
+            addBinding: true 
+            protocol: 'http' 
+            iPAddress: 'All Unassigned'
+            port: '82'
+            bindings: 
+            createOrUpdateAppPoolForWebsite: true
+            appPoolNameForWebsite: 'testpool'
+            dotNetVersionForWebsite: 'v4.0'
+            appPoolIdentityForWebsite: 'ApplicationPoolIdentity'
+        
+        - task: IISWebAppDeploymentOnMachineGroup@0
+          inputs:
+            webSiteName: 'testdeploy'
+            package: 'C:\azagent\A3\_work\2\buildArtifact\testwebapp.zip' 
