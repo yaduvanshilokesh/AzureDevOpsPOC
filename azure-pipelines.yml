@@ -30,35 +30,3 @@ jobs:
     inputs:
       pathtoPublish: '$(Build.ArtifactStagingDirectory)'
       artifactName: buildArtifact
-
-- deployment: VMDeploy
-  displayName: IIS_Deploy
-  pool:
-    vmImage: 'windows-latest'
-  environment: Dev.ICPL13104
-  dependsOn: Build
-  strategy:
-    runOnce:
-      deploy:
-        steps:
-        - task: IISWebAppManagementOnMachineGroup@0
-          inputs:
-            iISDeploymentType: 'IISWebsite'
-            actionIISWebsite: 'CreateOrUpdateWebsite'
-            websiteName: 'testdeploy'
-            websitePhysicalPath: 'D:\testdeploy' 
-            websitePhysicalPathAuth: 'WebsiteUserPassThrough'
-            addBinding: true 
-            protocol: 'http' 
-            iPAddress: 'All Unassigned'
-            port: '82'
-            bindings: 
-            createOrUpdateAppPoolForWebsite: true
-            appPoolNameForWebsite: 'testpool'
-            dotNetVersionForWebsite: 'v4.0'
-            appPoolIdentityForWebsite: 'ApplicationPoolIdentity'
-        
-        - task: IISWebAppDeploymentOnMachineGroup@0
-          inputs:
-            webSiteName: 'testdeploy'
-            package: 'C:\azagent\A3\_work\3\buildArtifact\WebApp.zip' 
