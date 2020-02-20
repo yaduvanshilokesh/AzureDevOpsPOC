@@ -29,7 +29,7 @@ steps:
     
 - task: WindowsMachineFileCopy@2
   inputs:
-    sourcePath: ${System.DefaultWorkingDirectory}/**/*.zip
+    sourcePath: '**/*.zip'
     machineNames: localhost.com
     adminUserName: lokesh.yadav 
     adminPassword: Shiv@221
