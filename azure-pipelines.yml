@@ -29,7 +29,7 @@ steps:
     
 - task: WindowsMachineFileCopy@2
   inputs:
-    sourcePath: '**/*.zip'
+    sourcePath: 'C:\Users\lokesh.yadav\Desktop\Agent\_work\1\a\WebApp.zip'
     machineNames: localhost.com
     adminUserName: lokesh.yadav 
     adminPassword: Shiv@221
