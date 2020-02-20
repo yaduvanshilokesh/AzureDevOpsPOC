@@ -26,3 +26,12 @@ steps:
   inputs:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)'
     artifactName: buildArtifact
+    
+- task: WindowsMachineFileCopy@2
+  inputs:
+    sourcePath: ${System.DefaultWorkingDirectory}/**/*.zip
+    machineNames: localhost.com
+    adminUserName: lokesh.yadav 
+    adminPassword: Shiv@221
+    targetPath: D:\webapp
+    cleanTargetBeforeCopy: true
