@@ -31,7 +31,7 @@ steps:
   inputs:
     sourcePath: 'C:\Users\lokesh.yadav\Desktop\Agent\_work\1\a\WebApp.zip'
     machineNames: '127.0.0.1'
-    adminUserName: lokesh.yadav
+    adminUserName: infostretch.com\lokesh.yadav
     adminPassword: Shiv@221
     targetPath: 'D:\webapp'
     cleanTargetBeforeCopy: true
