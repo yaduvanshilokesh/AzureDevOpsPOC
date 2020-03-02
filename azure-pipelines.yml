@@ -36,7 +36,7 @@ steps:
   inputs:
     machines: localhost:5986
     scriptType: 'filePath'
-    scriptPath: 'C:\Users\ninad.pantane\Azure DevOps\Agent\vsts-agent-win-x64-2.153.1\_work\1\s\iis.ps1'
+    scriptPath: 'C:\Users\lokesh.yadav\Desktop\Agent\_work\2\s\iis.ps1'
     communicationProtocol: 'https'
     
     
