@@ -23,7 +23,7 @@ steps:
 - task: VSBuild@1
   inputs:
     solution: '$(solution)'
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=FileSystem /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp"'
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
@@ -32,5 +32,11 @@ steps:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)'
     artifactName: buildArtifact      
 
+- task: PowerShellOnTargetMachines@3
+  inputs:
+    machines: localhost:5986
+    scriptType: 'filePath'
+    scriptPath: 'C:\Users\ninad.pantane\Azure DevOps\Agent\vsts-agent-win-x64-2.153.1\_work\1\s\iis.ps1'
+    communicationProtocol: 'https'
     
     
