@@ -4,7 +4,7 @@
 New-Item -ItemType directory "D:\AzureDevOpsPOC\$websitename" -force
 
 try{
-	$test=Get-WebAppPoolState TestSite2
+	$test=Get-WebAppPoolState $websitename
 }
 catch {
 	write-host "doesn't exist"
