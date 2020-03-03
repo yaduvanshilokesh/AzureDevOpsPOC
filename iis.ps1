@@ -1,4 +1,6 @@
-﻿param(
+﻿Import-Module WebAdministration
+
+param(
     [string]$websitename="TestSite"
 )
 New-Item -ItemType directory "D:\AzureDevOpsPOC\$websitename" -force
